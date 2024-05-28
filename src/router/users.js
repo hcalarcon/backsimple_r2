@@ -13,13 +13,31 @@ const routerUsers = Router();
  *  post:
  *      sumary: loguear usuario
  */
-routerUsers.get("/user/login", logIn);
+routerUsers.post("/user/login", logIn);
 
 /**
  * @swagger
  * /usersp:
- *  post:
- *      sumary: crea usuarios
+ *   post:
+ *     summary: Crea usuarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Usuario creado con éxito
+ *       '400':
+ *         description: Error al crear el usuario
  */
 routerUsers.post("/user/usersp", createUsers);
 
