@@ -96,12 +96,47 @@ export const createUsers = async (req, res) => {
   }
 };
 
+//middleware
+export const auth = (req, res, next) => {
+  //vamos a guardar el token que viene desde el front
+  const token = req.headers["mani"];
+
+  //verificar si el token esta en la petición
+  if (!token) return res.status(400).json({ message: "sin token" });
+
+  //verificar si el token es valido
+  jwt.verify(token, secreto, (error, user) => {
+    //comprobar si hay error -> que el token es invalido
+    if (error) {
+      return res.status(400).json({ message: "token invalido" });
+    } else {
+      //cargar la request con los datos del usuario
+      req.user = user;
+      //vamos a ejecutar la siguiente funcion
+      next();
+    }
+  });
+};
+
+//funcion que emula una consulta a la bd ->
+export const getData = async (req, res) => {
+  //obtener los datos del usuario
+  const user = req.user;
+  //meterme a la bd, obteler la lista de materias
+  const materias = [
+    { id: 10, nombre: "web dinamica" },
+    { id: 12, nombre: "so" },
+    { id: 15, nombre: "arquitectura" },
+  ];
+  return res.status(200).json({ materias: materias, usuario: user });
+};
+
 //privada
 //generar el token
 const getToken = (payload) => {
   //generar el token
   try {
-    const token = jwt.sign(payload, secreto, { expiresIn: "5m" });
+    const token = jwt.sign(payload, secreto, { expiresIn: "1m" });
     return token;
   } catch (error) {
     console.log(error);

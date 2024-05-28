@@ -1,7 +1,7 @@
 //archivo para manejar las rutas de usuarios
 
 import { Router } from "express";
-import { createUsers, logIn } from "../controller/users";
+import { auth, createUsers, getData, logIn } from "../controller/users";
 
 //objeto para manejo de url
 const routerUsers = Router();
@@ -40,5 +40,13 @@ routerUsers.post("/user/login", logIn);
  *         description: Error al crear el usuario
  */
 routerUsers.post("/user/usersp", createUsers);
+
+/**
+ * @swagger
+ * /user/getData:
+ *  get:
+ *      sumary: obtener lista de materias
+ */
+routerUsers.get("/user/getData", auth, getData);
 
 export default routerUsers;
